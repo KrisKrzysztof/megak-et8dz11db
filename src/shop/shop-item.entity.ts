@@ -34,4 +34,9 @@ export class ShopItemEntity implements ShopItem {
     })
     boughtCounter: number;
 
+    @Column({
+        default: false,
+    })
+    wasEverBought: boolean;
+
 }

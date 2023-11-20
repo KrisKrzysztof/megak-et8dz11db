@@ -69,6 +69,10 @@ export class ShopService {
     }
 
     async addBoughtCounter(id: string) {
+        await this.shopItemEntityRepository.update(id, {
+            wasEverBought: true,
+        })
+
         const item = await this.shopItemEntityRepository.findOneOrFail({
             where: {id}
         });
