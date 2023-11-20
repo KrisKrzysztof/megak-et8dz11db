@@ -17,13 +17,6 @@ export class ShopItemEntity implements ShopItem {
     })
     description: string;
 
-    // @Column({
-    //     length: 10000,
-    //     default: null,
-    //     nullable: true,
-    // })
-    // description2: string | null;
-
     @Column({
         type: 'float',
         precision: 6,
@@ -31,9 +24,14 @@ export class ShopItemEntity implements ShopItem {
     })
     price: number;
 
-    // @Column({
-    //     default: () => 'CURRENT_TIMESTAMP'
-    // })
-    // createdAt: Date;
+    @Column({
+        default: () => 'CURRENT_TIMESTAMP'
+    })
+    createdAt: Date;
+
+    @Column({
+        default: 0,
+    })
+    boughtCounter: number;
 
 }

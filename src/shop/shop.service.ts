@@ -68,7 +68,15 @@ export class ShopService {
         return newItem;
     }
 
+    async addBoughtCounter(id: string) {
+        const item = await this.shopItemEntityRepository.findOneOrFail({
+            where: {id}
+        });
+
+        item.boughtCounter++;
+
+        await this.shopItemEntityRepository.save(item);
+    }
+
 
 }
-
-//todo 18:20

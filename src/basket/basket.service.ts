@@ -16,7 +16,7 @@ export class BasketService {
     }
 
     add(item: AddProductDto): AddProductToBasketResponse {
-        const {name, count} = item;
+        const {name, count, id} = item;
 
         if (
             typeof name !== 'string'
@@ -34,6 +34,8 @@ export class BasketService {
             }
         }
         this.items.push(item);
+
+        this.shopService.addBoughtCounter(id);
 
         return {
             isSuccess: true,
