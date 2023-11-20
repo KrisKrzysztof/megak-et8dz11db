@@ -1,40 +1,18 @@
 import {forwardRef, Inject, Injectable} from '@nestjs/common';
 import {GetListOfItemsResponse} from "../interfaces/shop";
 import {BasketService} from "../basket/basket.service";
-import {InjectRepository} from "@nestjs/typeorm";
 import {ShopItemEntity} from "./shop-item.entity";
-import {Repository} from "typeorm";
 
 @Injectable()
 export class ShopService {
 
     constructor(
         @Inject(forwardRef(() => BasketService)) private basketService: BasketService,
-        @InjectRepository(ShopItemEntity) private shopItemEntityRepository: Repository<ShopItemEntity>,
     ) {
     }
 
     async getProducts(): Promise<GetListOfItemsResponse> {
-        return this.shopItemEntityRepository.find();
-
-        // console.log(this.basketService.countPromo());
-        // return [
-        //     {
-        //         name: 'Ogórki Kiszone',
-        //         description: 'Bardzo dobre ogórki.',
-        //         price: 4,
-        //     },
-        //     {
-        //         name: 'Super ogórki',
-        //         description: 'Jeszcze lepsze ogórki.',
-        //         price: 6 /* - this.basketService.countPromo() */,
-        //     },
-        //     {
-        //         name: 'Ogórki afrykańskie',
-        //         description: 'Ogórki z dalekich krajów.',
-        //         price: 5 /* - this.basketService.countPromo() */,
-        //     },
-        // ];
+        return ShopItemEntity.find();
     }
 
 
@@ -48,13 +26,13 @@ export class ShopService {
     }
 
     async getOneProduct(id: string): Promise<ShopItemEntity> {
-        return this.shopItemEntityRepository.findOneOrFail({
+        return ShopItemEntity.findOneOrFail({
             where: {id}
         });
     }
 
     async removeProduct(id: string) {
-        await this.shopItemEntityRepository.delete(id);
+        await ShopItemEntity.delete(id);
     }
 
     async createProduct(): Promise<ShopItemEntity> {
@@ -63,23 +41,23 @@ export class ShopService {
         newItem.name = 'Duży ogórek';
         newItem.description = 'Naprawdę!';
 
-        await this.shopItemEntityRepository.save(newItem);
+        await newItem.save();
 
         return newItem;
     }
 
     async addBoughtCounter(id: string) {
-        await this.shopItemEntityRepository.update(id, {
+        await ShopItemEntity.update(id, {
             wasEverBought: true,
         })
 
-        const item = await this.shopItemEntityRepository.findOneOrFail({
+        const item = await ShopItemEntity.findOneOrFail({
             where: {id}
         });
 
         item.boughtCounter++;
 
-        await this.shopItemEntityRepository.save(item);
+        await item.save();
     }
 
 
